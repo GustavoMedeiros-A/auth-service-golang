@@ -10,6 +10,7 @@ import (
 func init() {
 	initializers.ConnectToDB()
 	initializers.LoadEnv()
+	initializers.SyncDatabase()
 }
 
 func main() {
