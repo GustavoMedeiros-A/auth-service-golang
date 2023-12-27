@@ -1,24 +1,23 @@
-version: '3'
-
+version: "3"
 
 services:
-
   # auth-service:
-  #   image: auth
-  #   container_name: auth-service
   #   build:
-  #     context: ./../auth-service
-  #     dockerfile: ./../auth-service/auth-service.dockerfile
-  #   restart: always
+  #     context: ../auth-service
+  #     dockerfile: auth-service.dockerfile
+  #   container_name: auth-service
   #   ports:
-  #      - "8081:80"
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 1
+  #     - "8088:8080"
+  #   volumes:
+  #     - ../auth-service:/app
+  #   environment:
+  #     - GIN_MODE=debug
+  #   depends_on:
+  #     - postgres
 
   postgres:
     container_name: postgres
-    image: 'postgres:14.0'
+    image: "postgres:14.0"
     ports:
       - "5432:5432"
     restart: always
@@ -30,4 +29,4 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: users
     volumes:
-      - ./db-data/postgres/:/var/lib/postgresql/data/ 
+      - ./db-data/postgres/:/var/lib/postgresql/data/

@@ -1,6 +1,7 @@
 # 1 - Install Gin to framerork
 
 - **github.com/gin-gonic/gin**
+- **github.com/gin-contrib/cors**
 
 # 2 - install all packages
 
@@ -14,5 +15,5 @@
 - **go get github.com/githubnemo/CompileDaemon**
 - **go install github.com/githubnemo/CompileDaemon**
 
-- After all that, config the project as you can see in the files and run **compiledaemon --command="./auth-service"** to
+- After all that, config the project as you can see in the files and run **CompileDaemon --command="./auth-service"** to
   run in a compileDaemon mode
