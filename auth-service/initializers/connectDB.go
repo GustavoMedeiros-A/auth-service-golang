@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// var DB *gorm.DB
+var DB *gorm.DB
 
 func ConnectToDB() *common.Config {
 	err := godotenv.Load(".env")
@@ -21,6 +21,9 @@ func ConnectToDB() *common.Config {
 
 	dsn := os.Getenv("DB")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
+	DB = db
+
 	if err != nil {
 		panic("Failed to connect to database")
 	}
