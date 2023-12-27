@@ -1,7 +1,10 @@
 package initializers
 
-import "auth-service/models"
+import (
+	"auth-service/common"
+	"auth-service/modules/models"
+)
 
-func SyncDatabase() {
-	DB.AutoMigrate(&models.User{})
+func SyncDatabase(config *common.Config) {
+	config.DB.AutoMigrate(&models.User{})
 }

@@ -1,8 +1,7 @@
 package users
 
 import (
-	"auth-service/initializers"
-	"auth-service/models"
+	"auth-service/modules/models"
 	"fmt"
 	"net/http"
 	"os"
@@ -13,8 +12,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func SignUp(c *gin.Context) {
-	// Get the email/password of req body
+func (repo *Config) SignUp(c *gin.Context) {
+
 	var body struct {
 		Email    string
 		password string
@@ -37,21 +36,29 @@ func SignUp(c *gin.Context) {
 	}
 
 	// Create the user
+
 	user := models.User{Email: body.Email, Password: string(hash)}
-	result := initializers.DB.Create(&user)
-	if result.Error != nil {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to hash password",
 		})
 		return
 	}
+	err = repo.Create(user)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	fmt.Println("No error here")
 
 	// Respond
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-func Login(c *gin.Context) {
-	// get the email and password of req body
+func (repo *Config) Login(c *gin.Context) {
 
 	var body struct {
 		Email    string
@@ -65,11 +72,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Look up requested user
-	var user models.User
-	initializers.DB.First(&user, "email = ?", body.Email)
+	user, err := repo.FindByEmail((body.Email))
 
-	if user.ID == 0 {
+	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{
 			"error": "Invalid user email or password",
 		})
@@ -78,7 +83,7 @@ func Login(c *gin.Context) {
 	}
 
 	// Compare sent in pass with saved user pass hash
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.password))
 
 	if err != nil {
 		c.JSON(http.StatusBadGateway, gin.H{

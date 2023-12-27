@@ -4,20 +4,16 @@ FROM golang:latest
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy all project
-COPY . . 
-
-# Run go mod tidy to synchronize and verify dependencies
+# Copy go.mod and go.sum first and download modules for caching
+COPY go.mod go.sum ./
 RUN go mod tidy
-
-# Download necessary dependencies
 RUN go mod download
 
-# Build the Go application
-RUN go build -o authApp ./cmd
+COPY . .
+# Install CompileDaemon
+RUN go get github.com/githubnemo/CompileDaemon
+RUN go install -mod=mod github.com/githubnemo/CompileDaemon
 
-# Expose port if your application runs on a specific port
-# EXPOSE 80
 
-# Set the entrypoint command to start the application
-CMD ["./authApp"]
+# CompileDaemon will run the application and watch for file changes
+ENTRYPOINT CompileDaemon -log-prefix=false --build="go build -o authApp ./" --command=./authApp
