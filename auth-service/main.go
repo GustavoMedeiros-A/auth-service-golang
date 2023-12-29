@@ -3,6 +3,7 @@ package main
 import (
 	"auth-service/initializers"
 	"auth-service/modules/permissions"
+	"auth-service/modules/roles"
 	"auth-service/modules/users"
 	"fmt"
 	"time"
@@ -33,8 +34,11 @@ func main() {
 
 	usersConfig := users.NewUserRepository(config)
 	permissionsConfig := permissions.NewPermissionRepository(config)
+	rolesConfig := roles.NewRolesRepository(config)
+
 	usersConfig.RoutesUser(router)
 	permissionsConfig.RoutesPermission(router)
+	rolesConfig.RoutesRoles(router)
 
 	router.Run(string("0.0.0.0:8080"))
 

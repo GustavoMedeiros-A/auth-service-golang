@@ -15,8 +15,10 @@ import (
 func (repo *Config) SignUp(c *gin.Context) {
 
 	var body struct {
+		Name     string
 		Email    string
-		password string
+		Password string
+		Roles    models.Roles
 	}
 
 	if c.Bind(&body) != nil {
@@ -26,7 +28,7 @@ func (repo *Config) SignUp(c *gin.Context) {
 		return
 	}
 	// Hash the password
-	hash, err := bcrypt.GenerateFromPassword([]byte(body.password), 10)
+	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

@@ -28,3 +28,15 @@ func (repo *PermissionRepository) FindAllPermissions() ([]*models.Permissions, e
 
 	return permissions, nil
 }
+
+func (repo *PermissionRepository) FindByIdPermission(id uint) (*models.Permissions, error) {
+	var permission models.Permissions
+
+	// Assuming your permissions have an ID field that's a uint
+	result := repo.db.DB.First(&permission, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &permission, nil
+}

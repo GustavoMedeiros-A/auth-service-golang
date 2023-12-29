@@ -4,6 +4,7 @@ import (
 	"auth-service/modules/models"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -51,5 +52,26 @@ func (repo *PermissionRepository) FindAll(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"permission": permission})
+
+}
+
+func (repo *PermissionRepository) FindById(c *gin.Context) {
+	idParam := c.Param("id")
+
+	id, err := strconv.ParseUint(idParam, 10, 32)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+
+	permission, err := repo.FindByIdPermission(uint(id))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, permission)
 
 }
