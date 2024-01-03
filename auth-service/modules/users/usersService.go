@@ -12,7 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func (repo *Config) SignUp(c *gin.Context) {
+func (repo *UserConfig) SignUp(c *gin.Context) {
 
 	var body struct {
 		Email    string
@@ -58,7 +58,7 @@ func (repo *Config) SignUp(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{})
 }
 
-func (repo *Config) Login(c *gin.Context) {
+func (repo *UserConfig) Login(c *gin.Context) {
 
 	var body struct {
 		Email    string

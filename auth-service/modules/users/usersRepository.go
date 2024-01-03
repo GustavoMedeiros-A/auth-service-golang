@@ -1,26 +1,29 @@
 package users
 
 import (
-	"auth-service/common"
 	"auth-service/modules/models"
+
+	"gorm.io/gorm"
 )
 
-type Config struct {
-	db *common.Config
+type UserConfig struct {
+	DB *gorm.DB
 }
 
-func NewUserRepository(config *common.Config) *Config {
-	return &Config{db: config}
+func NewUserModel(db *gorm.DB) UserConfig {
+	return UserConfig{
+		DB: db,
+	}
 }
 
-func (repo *Config) FindByEmail(email string) (*models.User, error) {
+func (repo *UserConfig) FindByEmail(email string) (*models.User, error) {
 	var user models.User
-	result := repo.db.DB.Where("email = ?", email).First(&user)
+	result := repo.DB.Where("email = ?", email).First(&user)
 	return &user, result.Error
 }
 
-func (repo *Config) Create(user models.User) error {
-	result := repo.db.DB.Create(&user)
+func (repo *UserConfig) Create(user models.User) error {
+	result := repo.DB.Create(&user)
 	if result.Error != nil {
 		return result.Error
 	}

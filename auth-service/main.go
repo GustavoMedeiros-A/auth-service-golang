@@ -31,7 +31,8 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	usersConfig := users.NewUserRepository(config)
+	// app := Config{}
+	usersConfig := users.NewUserModel(config.DB)
 	permissionsConfig := permissions.NewPermissionRepository(config)
 	usersConfig.RoutesUser(router)
 	permissionsConfig.RoutesPermission(router)

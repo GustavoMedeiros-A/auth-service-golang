@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (userConfig *Config) RoutesUser(route *gin.Engine) {
+func (userConfig *UserConfig) RoutesUser(route *gin.Engine) {
 	user := route.Group("/api")
 	{
 		user.POST("/signup", userConfig.SignUp)
